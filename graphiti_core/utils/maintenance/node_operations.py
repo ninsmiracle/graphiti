@@ -232,6 +232,7 @@ async def _collect_candidate_nodes(
     if existing_nodes_override is not None:
         candidate_nodes.extend(existing_nodes_override)
 
+    # 去重
     seen_candidate_uuids: set[str] = set()
     ordered_candidates: list[EntityNode] = []
     for candidate in candidate_nodes:
@@ -406,6 +407,7 @@ async def resolve_extracted_nodes(
     existing_nodes = await _collect_candidate_nodes(
         clients,
         extracted_nodes,
+        # 在add_episode中，existing_nodes_override参数没传，默认是None
         existing_nodes_override,
     )
 
@@ -428,7 +430,8 @@ async def resolve_extracted_nodes(
         previous_episodes,
         entity_types,
     )
-
+    # 如果state.resolved_nodes[idx]为None，则将extracted_nodes[idx]赋值给state.resolved_nodes[idx]
+    # extracted_nodes是add_episode中extract_nodes的返回值,即解析后的entity节点列表
     for idx, node in enumerate(extracted_nodes):
         if state.resolved_nodes[idx] is None:
             state.resolved_nodes[idx] = node

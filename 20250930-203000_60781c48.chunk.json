@@ -1,0 +1,408 @@
+{
+  "version": "mf_scene_v2.2",
+  "audio": {
+    "start_time": "2025-09-30T20:30:00+08:00",
+    "duration_sec": 300.024,
+    "timezone": "Asia/Shanghai"
+  },
+  "entity_canon": {
+    "people": [
+      {
+        "id": "p1",
+        "canonical": "用户",
+        "aliases": [
+          "我",
+          "本人"
+        ],
+        "confidence": 0.95,
+        "voice_profile": {
+          "gender": "male",
+          "age_range": "25-35",
+          "tone_characteristics": [
+            "calm",
+            "cooperative"
+          ],
+          "accent": null,
+          "speaking_pace": "moderate",
+          "confidence": 0.9,
+          "sample_spans": [
+            [
+              209.5,
+              210.5
+            ]
+          ]
+        }
+      },
+      {
+        "id": "p2",
+        "canonical": "教练",
+        "aliases": [],
+        "confidence": 0.95,
+        "voice_profile": {
+          "gender": "male",
+          "age_range": "30-40",
+          "tone_characteristics": [
+            "instructional",
+            "professional",
+            "explanatory"
+          ],
+          "accent": null,
+          "speaking_pace": "moderate_to_fast",
+          "confidence": 0.9,
+          "sample_spans": [
+            [
+              226.4,
+              240.0
+            ]
+          ]
+        }
+      }
+    ],
+    "places": [
+      {
+        "id": "l1",
+        "canonical": "户外",
+        "aliases": [],
+        "confidence": 0.99
+      },
+      {
+        "id": "l2",
+        "canonical": "健身房",
+        "aliases": [],
+        "confidence": 0.95
+      }
+    ],
+    "projects_or_topics": [
+      {
+        "id": "t1",
+        "canonical": "三分化健身训练计划",
+        "aliases": [
+          "三分化"
+        ],
+        "confidence": 0.98
+      }
+    ],
+    "devices_or_tools": [
+      {
+        "id": "d1",
+        "canonical": "交通工具（疑似电动车或自行车）",
+        "aliases": [],
+        "confidence": 0.7
+      },
+      {
+        "id": "d2",
+        "canonical": "泡沫轴",
+        "aliases": [],
+        "confidence": 0.99
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "id": "s1",
+      "start_sec": 0.0,
+      "end_sec": 125.0,
+      "start_time": "2025-09-30T20:30:00+08:00",
+      "end_time": "2025-09-30T20:32:05+08:00",
+      "location": {
+        "place_id": "l1",
+        "candidates": [
+          {
+            "name": "户外",
+            "p": 0.99
+          }
+        ]
+      },
+      "activity": {
+        "label": "commute",
+        "p": 0.9,
+        "alternatives": [
+          {
+            "label": "travel",
+            "p": 0.1
+          }
+        ]
+      },
+      "participants": [
+        "p1"
+      ],
+      "speakers": [],
+      "svo_bullets": [
+        {
+          "text": "用户-骑行-在户外",
+          "type": "activity",
+          "evidence_spans": [
+            [
+              0.0,
+              125.0
+            ]
+          ],
+          "confidence": 0.85
+        },
+        {
+          "text": "用户-遭遇-强风环境",
+          "type": "environment",
+          "evidence_spans": [
+            [
+              0.0,
+              125.0
+            ]
+          ],
+          "confidence": 0.95
+        },
+        {
+          "text": "用户-使用-交通工具（疑似电动车或自行车）",
+          "type": "activity",
+          "evidence_spans": [
+            [
+              0.0,
+              125.0
+            ]
+          ],
+          "confidence": 0.7
+        }
+      ],
+      "environment_index": {
+        "transport_mode": "cycling",
+        "weather": "windy",
+        "location_type": "outdoor",
+        "time_of_day": "evening"
+      },
+      "context_tags": [
+        "outdoor",
+        "moving",
+        "cycling",
+        "windy",
+        "solo",
+        "commute",
+        "noisy_audio",
+        "wind_noise"
+      ],
+      "summary": "用户在大风天气中骑行一种交通工具，周围伴有持续的强风声、车辆颠簸声和轻微的马达声。",
+      "key_quotes": [],
+      "todos": [],
+      "transcript": [],
+      "acoustic_details": {
+        "primary_sounds": [
+          {
+            "label": "wind_noise",
+            "probability": 0.95
+          },
+          {
+            "label": "rattling",
+            "probability": 0.8
+          },
+          {
+            "label": "electric_motor",
+            "probability": 0.6
+          }
+        ],
+        "avg_noise_level": 0.8,
+        "speech_clarity": "none"
+      },
+      "uncertainties": [
+        {
+          "field": "devices_or_tools",
+          "note": "根据持续的马达声和颠簸声推断为电动车或自行车，但无法确认具体类型。",
+          "candidates": [
+            "电动自行车",
+            "自行车",
+            "滑板车"
+          ]
+        }
+      ],
+      "confidence": 0.9,
+      "merge_hint": {
+        "can_merge_with_prev": false,
+        "can_merge_with_next": false,
+        "reason": "活动和地点发生根本性变化（从户外移动到室内静止）。"
+      }
+    },
+    {
+      "id": "s2",
+      "start_sec": 125.0,
+      "end_sec": 300.024,
+      "start_time": "2025-09-30T20:32:05+08:00",
+      "end_time": "2025-09-30T20:35:00+08:00",
+      "location": {
+        "place_id": "l2",
+        "candidates": [
+          {
+            "name": "健身房",
+            "p": 0.95
+          },
+          {
+            "name": "体育馆",
+            "p": 0.2
+          }
+        ]
+      },
+      "activity": {
+        "label": "exercise",
+        "p": 0.98,
+        "alternatives": [
+          {
+            "label": "social",
+            "p": 0.02
+          }
+        ]
+      },
+      "participants": [
+        "p1",
+        "p2"
+      ],
+      "speakers": [
+        {
+          "spk": "SPEAKER_01",
+          "maps_to": "p2",
+          "confidence": 0.95
+        },
+        {
+          "spk": "SPEAKER_02",
+          "maps_to": "p1",
+          "confidence": 0.95
+        }
+      ],
+      "svo_bullets": [
+        {
+          "text": "用户-进入-健身房",
+          "type": "activity",
+          "evidence_spans": [
+            [
+              125.0,
+              140.0
+            ]
+          ],
+          "confidence": 0.9
+        },
+        {
+          "text": "用户-处于-有器械声和回声的室内环境",
+          "type": "environment",
+          "evidence_spans": [
+            [
+              135.0,
+              300.024
+            ]
+          ],
+          "confidence": 0.95
+        },
+        {
+          "text": "教练-与用户-讨论训练计划",
+          "type": "interaction",
+          "evidence_spans": [
+            [
+              208.0,
+              245.0
+            ]
+          ],
+          "confidence": 0.98
+        },
+        {
+          "text": "教练-提出-“三分化健身训练计划”",
+          "type": "interaction",
+          "evidence_spans": [
+            [
+              226.4,
+              240.0
+            ]
+          ],
+          "confidence": 0.98
+        },
+        {
+          "text": "教练-指导用户-使用泡沫轴进行热身",
+          "type": "interaction",
+          "evidence_spans": [
+            [
+              273.0,
+              300.024
+            ]
+          ],
+          "confidence": 0.95
+        },
+        {
+          "text": "用户-进行-胸椎放松活动",
+          "type": "activity",
+          "evidence_spans": [
+            [
+              278.0,
+              300.024
+            ]
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "environment_index": {
+        "transport_mode": "stationary",
+        "weather": null,
+        "location_type": "indoor",
+        "time_of_day": "evening"
+      },
+      "context_tags": [
+        "indoor",
+        "stationary",
+        "exercise",
+        "training",
+        "gym",
+        "guided_instruction",
+        "two_people",
+        "clear_audio",
+        "conversation"
+      ],
+      "summary": "用户进入健身房与教练会面。教练在确认用户身体状况后，提出了“三分化”训练方案，并指导用户使用泡沫轴进行胸椎部位的热身准备活动。",
+      "key_quotes": [
+        {
+          "time_span": [
+            226.4,
+            240.0
+          ],
+          "text": "可以把你分成三分化，然后肩背放在一起练，然后胸跟手臂放在一起练，腿跟核心放在一起练。",
+          "speaker": "SPEAKER_01"
+        }
+      ],
+      "todos": [],
+      "transcript": [],
+      "acoustic_details": {
+        "primary_sounds": [
+          {
+            "label": "speech",
+            "probability": 0.95
+          },
+          {
+            "label": "gym_ambience",
+            "probability": 0.8
+          },
+          {
+            "label": "weights_clanking",
+            "probability": 0.6
+          }
+        ],
+        "avg_noise_level": 0.3,
+        "speech_clarity": "high"
+      },
+      "uncertainties": [
+        {
+          "field": "speakers",
+          "note": "根据对话内容和声音特征，将先说话且语气为指导性的SPEAKER_01映射为教练(p2)，后回应的SPEAKER_02映射为用户(p1)。",
+          "candidates": []
+        }
+      ],
+      "confidence": 0.95,
+      "merge_hint": {
+        "can_merge_with_prev": false,
+        "can_merge_with_next": true,
+        "reason": "健身训练活动在音频结束时仍在进行中，可能会在下一个音频切片中延续。"
+      },
+      "audio_stats": {
+        "traditional_vad_ratio": 0.953360768175583
+      }
+    }
+  ],
+  "suggested_merges": [],
+  "improvement_advice": [],
+  "warnings": [
+    {
+      "type": "high_scene_density",
+      "message": "场景切分频率较高（5分钟内2个场景），因存在明确的地点、活动和参与者变化强信号。"
+    }
+  ]
+}

@@ -146,6 +146,7 @@ def _cached_shingles(name: str) -> set[str]:
     return _shingles(name)
 
 
+# 这玩意相当于c++的struct
 @dataclass
 class DedupCandidateIndexes:
     """Precomputed lookup structures that drive entity deduplication heuristics."""
@@ -200,33 +201,69 @@ def _resolve_with_similarity(
     indexes: DedupCandidateIndexes,
     state: DedupResolutionState,
 ) -> None:
-    """Attempt deterministic resolution using exact name hits and fuzzy MinHash comparisons."""
+    """
+    使用确定性算法尝试解析实体节点去重（精确匹配和模糊 MinHash 比较）
+    
+    主要功能: 将新提取的节点与已存在的节点进行快速去重，分为三个策略:
+    1. 精确匹配: 归一化后的名称完全相同
+    2. 模糊匹配: 使用 MinHash + LSH 算法找到相似度高的候选节点
+    3. 无法确定: 标记为未解析，交给后续的 LLM 处理
+    """
     for idx, node in enumerate(extracted_nodes):
+        # ========================================
+        # 步骤 1: 归一化节点名称
+        # ========================================
+        # normalized_exact: 用于精确匹配 (小写化 + 去除多余空格)
+        # normalized_fuzzy: 用于模糊匹配 (进一步去除特殊字符，只保留字母数字和撇号)
         normalized_exact = _normalize_string_exact(node.name)
         normalized_fuzzy = _normalize_name_for_fuzzy(node.name)
 
+        # ========================================
+        # 步骤 2: 低熵名称检测 - 过滤不可靠的短名称
+        # ========================================
+        # 如果名称太短或熵太低 (如 "a", "bb", "AAA" 等重复性高的名称)
+        # 这种名称不适合用算法去重，直接标记为待 LLM 处理
         if not _has_high_entropy(normalized_fuzzy):
             state.unresolved_indices.append(idx)
             continue
 
+        # ========================================
+        # 步骤 3: 精确匹配 - 最快最准确的去重策略
+        # ========================================
+        # 在归一化索引中查找完全匹配的已存在节点
         existing_matches = indexes.normalized_existing.get(normalized_exact, [])
+        
+        # 情况 A: 找到唯一匹配 - 直接确定为重复节点
         if len(existing_matches) == 1:
             match = existing_matches[0]
-            state.resolved_nodes[idx] = match
-            state.uuid_map[node.uuid] = match.uuid
+            state.resolved_nodes[idx] = match  # 使用已存在的节点
+            state.uuid_map[node.uuid] = match.uuid  # 记录 uuid 映射
             if match.uuid != node.uuid:
-                state.duplicate_pairs.append((node, match))
+                state.duplicate_pairs.append((node, match))  # 记录重复对
             continue
+        
+        # 情况 B: 找到多个匹配 - 无法确定使用哪个，交给 LLM 判断
         if len(existing_matches) > 1:
             state.unresolved_indices.append(idx)
             continue
 
+        # ========================================
+        # 步骤 4: 模糊匹配 - 使用 MinHash + LSH 算法
+        # ========================================
+        # 如果精确匹配失败，尝试模糊匹配（用于处理拼写变体、同义词等）
+        
+        # 4.1 生成 shingles (字符 n-gram) 和 MinHash 签名
         shingles = _cached_shingles(normalized_fuzzy)
         signature = _minhash_signature(shingles)
+        
+        # 4.2 使用 LSH (局部敏感哈希) 快速找到可能相似的候选节点
+        # LSH 原理: 将签名分成多个 band，相似的节点大概率落在同一个 bucket 中
         candidate_ids: set[str] = set()
         for band_index, band in enumerate(_lsh_bands(signature)):
             candidate_ids.update(indexes.lsh_buckets.get((band_index, band), []))
 
+        # 4.3 计算 Jaccard 相似度，找到最佳匹配候选
+        # Jaccard 相似度 = |A ∩ B| / |A ∪ B| (交集除以并集)
         best_candidate: EntityNode | None = None
         best_score = 0.0
         for candidate_id in candidate_ids:
@@ -236,6 +273,7 @@ def _resolve_with_similarity(
                 best_score = score
                 best_candidate = indexes.nodes_by_uuid.get(candidate_id)
 
+        # 4.4 如果找到高相似度候选 (>= 0.9)，确定为重复
         if best_candidate is not None and best_score >= _FUZZY_JACCARD_THRESHOLD:
             state.resolved_nodes[idx] = best_candidate
             state.uuid_map[node.uuid] = best_candidate.uuid
@@ -243,6 +281,11 @@ def _resolve_with_similarity(
                 state.duplicate_pairs.append((node, best_candidate))
             continue
 
+        # ========================================
+        # 步骤 5: 无法确定 - 标记为待 LLM 处理
+        # ========================================
+        # 既没有精确匹配，也没有找到足够相似的候选节点
+        # 将其交给后续的 _resolve_with_llm 函数处理
         state.unresolved_indices.append(idx)
 
 

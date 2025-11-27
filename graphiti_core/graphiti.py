@@ -359,11 +359,24 @@ class Graphiti:
         entity_types: dict[str, type[BaseModel]] | None,
         excluded_entity_types: list[str] | None,
     ) -> tuple[list[EntityNode], dict[str, str], list[tuple[EntityNode, EntityNode]]]:
-        """Extract nodes from episode and resolve against existing graph."""
+        """
+        从 episode 中提取节点并与现有图进行解析去重
+        
+        主要流程:
+        1. extract_nodes: 使用 LLM 从文本中识别并提取实体
+        2. resolve_extracted_nodes: 将提取的实体与图中已存在的实体进行匹配、合并和去重
+        
+        返回:
+        - nodes: 去重后的节点列表
+        - uuid_map: 旧 uuid 到新 uuid 的映射
+        - duplicates: 识别出的重复节点对
+        """
+        # 步骤 1: 从 episode 内容中提取实体节点
         extracted_nodes = await extract_nodes(
             self.clients, episode, previous_episodes, entity_types, excluded_entity_types
         )
 
+        # 步骤 2: 解析节点 - 与图中已有节点进行匹配和去重
         nodes, uuid_map, duplicates = await resolve_extracted_nodes(
             self.clients,
             extracted_nodes,
@@ -385,7 +398,21 @@ class Graphiti:
         nodes: list[EntityNode],
         uuid_map: dict[str, str],
     ) -> tuple[list[EntityEdge], list[EntityEdge]]:
-        """Extract edges from episode and resolve against existing graph."""
+        """
+        从 episode 中提取边(关系)并与现有图进行解析
+        
+        主要流程:
+        1. extract_edges: 使用 LLM 识别实体之间的关系
+        2. resolve_edge_pointers: 更新边的节点引用 (因为节点可能在去重时发生了 uuid 变化)
+        3. resolve_extracted_edges: 将提取的边与图中已存在的边进行对比
+           - 合并相似的边
+           - 标记过时或冲突的边为失效状态
+        
+        返回:
+        - resolved_edges: 有效的新边或更新后的边
+        - invalidated_edges: 被标记为失效的边
+        """
+        # 步骤 1: 从 episode 内容中提取实体之间的关系边
         extracted_edges = await extract_edges(
             self.clients,
             episode,
@@ -396,8 +423,11 @@ class Graphiti:
             edge_types,
         )
 
+        # 步骤 2: 更新边的节点指针 (使用 uuid_map 更新因去重而改变的节点引用)
         edges = resolve_edge_pointers(extracted_edges, uuid_map)
 
+        # 步骤 3: 解析边 - 与图中已有的边进行匹配、合并和失效处理
+        # 如果新边与旧边冲突或过时，旧边会被标记为 invalidated
         resolved_edges, invalidated_edges = await resolve_extracted_edges(
             self.clients,
             edges,
@@ -416,13 +446,39 @@ class Graphiti:
         entity_edges: list[EntityEdge],
         now: datetime,
     ) -> tuple[list[EpisodicEdge], EpisodicNode]:
-        """Process and save episode data to the graph."""
+        """
+        处理并保存 episode 数据到知识图谱
+        
+        主要流程:
+        1. build_episodic_edges: 创建 episode 到实体节点的 MENTIONS 边
+           - 用于记录该 episode 提到了哪些实体
+        2. 更新 episode 的 entity_edges 属性 (记录涉及的关系边)
+        3. add_nodes_and_edges_bulk: 批量保存所有数据到数据库
+           - 保存 episode 节点
+           - 保存 episodic_edges (MENTIONS 边)
+           - 保存 entity 节点
+           - 保存 entity_edges (实体关系边)
+           - 生成并保存所有的 embedding 向量
+        
+        返回:
+        - episodic_edges: episode 到实体的 MENTIONS 边列表
+        - episode: 更新后的 episode 对象
+        """
+        # 步骤 1: 构建 episodic 边 - 从 episode 指向它提到的每个实体
+        # 这些边表示 "episode MENTIONS entity" 的关系
         episodic_edges = build_episodic_edges(nodes, episode.uuid, now)
+        
+        # 步骤 2: 记录 episode 涉及的所有实体关系边
         episode.entity_edges = [edge.uuid for edge in entity_edges]
 
+        # 步骤 3: 如果配置不存储原始内容，清空 episode.content (节省存储空间)
         if not self.store_raw_episode_content:
             episode.content = ''
 
+        # 步骤 4: 批量保存所有数据到图数据库
+        # 这个函数会:
+        # - 为节点和边生成 embedding 向量 (用于语义搜索)
+        # - 将所有数据批量插入到数据库中
         await add_nodes_and_edges_bulk(
             self.driver,
             [episode],
@@ -683,26 +739,37 @@ class Graphiti:
                 background_tasks.add_task(graphiti.add_episode, **episode_data.dict())
                 return {"message": "Episode processing started"}
         """
+        # ============================================================
+        # 阶段 0: 初始化和参数验证
+        # ============================================================
         start = time()
         now = utc_now()
 
+        # 验证实体类型配置是否有效
         validate_entity_types(entity_types)
+        # 验证排除的实体类型列表是否有效
         validate_excluded_entity_types(excluded_entity_types, entity_types)
 
+        # 处理 group_id (用于图数据分区管理)
         if group_id is None:
-            # if group_id is None, use the default group id by the provider
-            # and the preset database name will be used
+            # 如果未提供 group_id，使用数据库提供者的默认 group_id
             group_id = get_default_group_id(self.driver.provider)
         else:
+            # 验证 group_id 的有效性
             validate_group_id(group_id)
             if group_id != self.driver._database:
-                # if group_id is provided, use it as the database name
+                # 如果提供的 group_id 与当前数据库不同，克隆驱动并切换数据库
                 self.driver = self.driver.clone(database=group_id)
                 self.clients.driver = self.driver
 
         with self.tracer.start_span('add_episode') as span:
             try:
-                # Retrieve previous episodes for context
+                # ============================================================
+                # 阶段 1: 检索历史上下文 - 获取相关的历史 episodes
+                # ============================================================
+                # 功能: 为当前 episode 提供上下文信息，帮助后续的实体识别和去重
+                # 如果提供了 previous_episode_uuids，则获取指定的 episodes
+                # 否则，获取最近的 RELEVANT_SCHEMA_LIMIT 个 episodes
                 previous_episodes = (
                     await self.retrieve_episodes(
                         reference_time,
@@ -714,7 +781,12 @@ class Graphiti:
                     else await EpisodicNode.get_by_uuids(self.driver, previous_episode_uuids)
                 )
 
-                # Get or create episode
+                # ============================================================
+                # 阶段 2: 创建或获取 Episode 节点
+                # ============================================================
+                # 功能: Episode 是知识图谱中的时间锚点，记录了一次对话或文本输入
+                # 如果提供了 uuid，从数据库获取已存在的 episode
+                # 否则，创建新的 EpisodicNode 对象
                 episode = (
                     await EpisodicNode.get_by_uuid(self.driver, uuid)
                     if uuid is not None
@@ -730,18 +802,38 @@ class Graphiti:
                     )
                 )
 
-                # Create default edge type map
+                # ============================================================
+                # 阶段 3: 构建边类型映射
+                # ============================================================
+                # 功能: 定义哪些实体类型之间可以建立哪些类型的关系
+                # 默认情况下，Entity 之间可以建立所有定义的边类型
                 edge_type_map_default = (
                     {('Entity', 'Entity'): list(edge_types.keys())}
                     if edge_types is not None
                     else {('Entity', 'Entity'): []}
                 )
 
-                # Extract and resolve nodes
+                # ============================================================
+                # 阶段 4: 节点提取 - 从 episode 中识别实体
+                # ============================================================
+                # 功能: 使用 LLM 从 episode_body 中提取实体节点 (如人物、地点、概念等)
+                # extract_nodes: 调用 LLM 进行实体识别和提取
+                # - 输入: 当前 episode、历史 episodes (作为上下文)
+                # - 输出: 提取的实体节点列表 (extracted_nodes)
                 extracted_nodes = await extract_nodes(
                     self.clients, episode, previous_episodes, entity_types, excluded_entity_types
                 )
 
+                # ============================================================
+                # 阶段 5: 节点解析与去重
+                # ============================================================
+                # 功能: 将提取的节点与图中已存在的节点进行匹配和去重
+                # resolve_extracted_nodes: 处理节点去重和合并逻辑
+                # - 输入: 提取的节点、当前 episode、历史 episodes
+                # - 输出: 
+                #   * nodes: 解析后的唯一节点列表
+                #   * uuid_map: 旧 uuid 到新 uuid 的映射 (用于更新引用)
+                #   * _: 重复节点列表 (这里未使用)
                 nodes, uuid_map, _ = await resolve_extracted_nodes(
                     self.clients,
                     extracted_nodes,
@@ -750,7 +842,19 @@ class Graphiti:
                     entity_types,
                 )
 
-                # Extract and resolve edges in parallel with attribute extraction
+                # ============================================================
+                # 阶段 6: 边提取与解析
+                # ============================================================
+                # 功能: 从 episode 中识别实体之间的关系，并处理边的去重和失效
+                # _extract_and_resolve_edges: 提取并解析实体关系
+                # - extract_edges: 使用 LLM 识别实体之间的关系 (如 "张三认识李四")
+                # - resolve_extracted_edges: 
+                #   * 与现有的边进行对比
+                #   * 合并相似的边
+                #   * 标记过时的边为失效 (invalidated)
+                # - 输出:
+                #   * resolved_edges: 有效的新边或更新的边
+                #   * invalidated_edges: 被标记为失效的旧边
                 resolved_edges, invalidated_edges = await self._extract_and_resolve_edges(
                     episode,
                     extracted_nodes,
@@ -762,19 +866,42 @@ class Graphiti:
                     uuid_map,
                 )
 
-                # Extract node attributes
+                # ============================================================
+                # 阶段 7: 节点属性提取
+                # ============================================================
+                # 功能: 为解析后的节点提取详细属性 (如描述、特征等)
+                # extract_attributes_from_nodes: 使用 LLM 从上下文中提取节点的详细信息
+                # - 输入: 解析后的节点列表、当前 episode、历史 episodes
+                # - 输出: hydrated_nodes (填充了完整属性的节点列表)
                 hydrated_nodes = await extract_attributes_from_nodes(
                     self.clients, nodes, episode, previous_episodes, entity_types
                 )
 
+                # 合并有效边和失效边 (失效边也需要保存，用于追踪历史)
                 entity_edges = resolved_edges + invalidated_edges
 
-                # Process and save episode data
+                # ============================================================
+                # 阶段 8: 保存数据到图数据库
+                # ============================================================
+                # 功能: 将处理后的 episode、节点和边保存到知识图谱中
+                # _process_episode_data: 执行数据持久化操作
+                # - build_episodic_edges: 创建 episode 到实体节点的 MENTIONS 边
+                # - add_nodes_and_edges_bulk: 批量插入节点和边到数据库
+                #   * 同时生成并保存 embedding 向量 (用于语义搜索)
+                # - 输出:
+                #   * episodic_edges: episode 提到的实体的引用边
+                #   * episode: 更新后的 episode 对象
                 episodic_edges, episode = await self._process_episode_data(
                     episode, hydrated_nodes, entity_edges, now
                 )
 
-                # Update communities if requested
+                # ============================================================
+                # 阶段 9: 社区更新 (可选)
+                # ============================================================
+                # 功能: 更新知识图谱中的社区结构 (用于聚类和层次化组织)
+                # update_community: 为每个新节点更新其所属的社区
+                # - 社区是一组相关实体的聚合
+                # - 用于支持更高层次的知识检索和推理
                 communities = []
                 community_edges = []
                 if update_communities:
@@ -788,7 +915,10 @@ class Graphiti:
 
                 end = time()
 
-                # Add span attributes
+                # ============================================================
+                # 阶段 10: 记录追踪信息和返回结果
+                # ============================================================
+                # 添加 span 属性用于分布式追踪和性能监控
                 span.add_attributes(
                     {
                         'episode.uuid': episode.uuid,
@@ -809,13 +939,14 @@ class Graphiti:
 
                 logger.info(f'Completed add_episode in {(end - start) * 1000} ms')
 
+                # 返回完整的处理结果
                 return AddEpisodeResults(
-                    episode=episode,
-                    episodic_edges=episodic_edges,
-                    nodes=hydrated_nodes,
-                    edges=entity_edges,
-                    communities=communities,
-                    community_edges=community_edges,
+                    episode=episode,              # 处理后的 episode 节点
+                    episodic_edges=episodic_edges,  # episode 到实体的引用边
+                    nodes=hydrated_nodes,          # 提取并填充属性的实体节点
+                    edges=entity_edges,            # 实体之间的关系边 (包括有效和失效的)
+                    communities=communities,       # 更新的社区节点 (可选)
+                    community_edges=community_edges,  # 社区边 (可选)
                 )
 
             except Exception as e:
