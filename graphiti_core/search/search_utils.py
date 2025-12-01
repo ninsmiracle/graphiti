@@ -1733,16 +1733,71 @@ async def get_edge_invalidation_candidates(
 def rrf(
     results: list[list[str]], rank_const=1, min_score: float = 0
 ) -> tuple[list[str], list[float]]:
+    """
+    RRF（Reciprocal Rank Fusion）算法 - COMBINED_HYBRID_SEARCH_RRF的核心
+    
+    【算法原理】
+    RRF是一种无监督的排序融合算法，通过倒数排名来融合多个搜索结果列表。
+    
+    公式：RRF_score(item) = Σ 1/(rank_const + rank_i)
+    其中：
+    - rank_i 是item在第i个搜索结果列表中的排名（从0开始）
+    - rank_const 是一个常数（默认为1），用于避免除零和平滑排名
+    
+    【为什么使用RRF？】
+    1. 简单有效：无需训练、无参数调优
+    2. 公平性：不偏向任何单一搜索方法
+    3. 鲁棒性：对不同搜索质量的列表都有较好表现
+    4. 零成本：纯算法，不消耗LLM token
+    
+    【应用场景：COMBINED_HYBRID_SEARCH_RRF】
+    在graphiti中，RRF用于融合：
+    - BM25全文搜索结果（基于关键词匹配）
+    - 余弦相似度向量搜索结果（基于语义理解）
+    - BFS图遍历结果（基于图结构）
+    
+    举例说明：
+    假设有3个搜索结果列表：
+    - BM25: ['edge1', 'edge2', 'edge3']
+    - Vector: ['edge2', 'edge1', 'edge4']
+    - BFS: ['edge3', 'edge4', 'edge1']
+    
+    RRF计算（rank_const=1）：
+    - edge1: 1/(1+0) + 1/(1+1) + 1/(1+2) = 1.0 + 0.5 + 0.33 = 1.83
+    - edge2: 1/(1+1) + 1/(1+0) + 0 = 0.5 + 1.0 + 0 = 1.5
+    - edge3: 1/(1+2) + 0 + 1/(1+0) = 0.33 + 0 + 1.0 = 1.33
+    - edge4: 0 + 1/(1+2) + 1/(1+1) = 0 + 0.33 + 0.5 = 0.83
+    
+    最终排序：edge1 > edge2 > edge3 > edge4
+    
+    【优势】
+    - edge1在所有列表中都出现，得分最高（共识高）
+    - 排名靠前的项目权重更大（1/(1+0)=1.0 vs 1/(1+2)=0.33）
+    - 即使只在一个列表中排名第一（edge2在Vector中），也能获得高分
+    
+    【参数说明】
+    - results: 多个搜索结果的UUID列表，每个列表已按相关性排序
+    - rank_const: 排名常数，通常为1（论文推荐值）
+    - min_score: 最低分数阈值，过滤掉低分结果
+    
+    【Token消耗】
+    完全不消耗LLM token，纯算法计算！
+    """
+    # 步骤1: 计算每个UUID的RRF分数
     scores: dict[str, float] = defaultdict(float)
     for result in results:
         for i, uuid in enumerate(result):
+            # RRF公式：score += 1/(rank_const + rank)
+            # rank从0开始，所以rank_const=1时，第1名得1分，第2名得0.5分，第3名得0.33分
             scores[uuid] += 1 / (i + rank_const)
 
+    # 步骤2: 按分数降序排序
     scored_uuids = [term for term in scores.items()]
     scored_uuids.sort(reverse=True, key=lambda term: term[1])
 
     sorted_uuids = [term[0] for term in scored_uuids]
 
+    # 步骤3: 过滤低分结果并返回
     return [uuid for uuid in sorted_uuids if scores[uuid] >= min_score], [
         scores[uuid] for uuid in sorted_uuids if scores[uuid] >= min_score
     ]
