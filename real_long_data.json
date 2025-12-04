@@ -1,0 +1,1430 @@
+{
+  "version": "mf_scene_v2.3",
+  "audio": {
+    "start_time": "2025-12-01T20:16:00+08:00",
+    "duration_sec": 1776.132,
+    "timezone": "Asia/Shanghai"
+  },
+  "entity_canon": {
+    "people": [
+      {
+        "id": "p1",
+        "canonical": "用户",
+        "aliases": [
+          "我"
+        ],
+        "confidence": 0.99,
+        "voice_profile": {
+          "gender": "male",
+          "age_range": "25-35",
+          "tone_characteristics": [
+            "casual",
+            "friendly",
+            "explanatory"
+          ],
+          "accent": null,
+          "speaking_pace": "moderate",
+          "confidence": 0.95,
+          "sample_spans": [
+            [
+              408.0,
+              411.5
+            ],
+            [
+              415.0,
+              417.0
+            ]
+          ]
+        }
+      },
+      {
+        "id": "p2",
+        "canonical": "朋友",
+        "aliases": [],
+        "confidence": 0.95,
+        "voice_profile": {
+          "gender": "male",
+          "age_range": "25-35",
+          "tone_characteristics": [
+            "casual",
+            "questioning",
+            "amused"
+          ],
+          "accent": null,
+          "speaking_pace": "moderate",
+          "confidence": 0.9,
+          "sample_spans": [
+            [
+              405.9,
+              407.5
+            ],
+            [
+              418.5,
+              419.5
+            ]
+          ]
+        }
+      }
+    ],
+    "places": [
+      {
+        "id": "l1",
+        "canonical": "地铁",
+        "aliases": [],
+        "confidence": 0.98
+      },
+      {
+        "id": "l2",
+        "canonical": "地铁站及附近街道",
+        "aliases": [],
+        "confidence": 0.95
+      },
+      {
+        "id": "l3",
+        "canonical": "户外街道",
+        "aliases": [],
+        "confidence": 0.95
+      },
+      {
+        "id": "l4",
+        "canonical": "家",
+        "aliases": [],
+        "confidence": 0.85
+      }
+    ],
+    "projects_or_topics": [
+      {
+        "id": "t1",
+        "canonical": "户外装备",
+        "aliases": [
+          "小气炉"
+        ],
+        "confidence": 0.95
+      },
+      {
+        "id": "t2",
+        "canonical": "大学话题",
+        "aliases": [
+          "211",
+          "华侨大学"
+        ],
+        "confidence": 0.9
+      }
+    ],
+    "devices_or_tools": [
+      {
+        "id": "d1",
+        "canonical": "小气炉",
+        "aliases": [],
+        "confidence": 0.98
+      }
+    ],
+    "other_entities": [
+      {
+        "id": "e1",
+        "canonical": "蛋蛋 (猫)",
+        "aliases": [
+          "蛋蛋"
+        ],
+        "confidence": 0.95
+      }
+    ]
+  },
+  "scenes": [
+    {
+      "id": "s1",
+      "start_sec": 0.0,
+      "end_sec": 273.5,
+      "start_time": "2025-12-01T20:16:00+08:00",
+      "end_time": "2025-12-01T20:20:33.500+08:00",
+      "location": {
+        "place_id": "l1",
+        "candidates": [
+          {
+            "name": "地铁",
+            "p": 0.98
+          }
+        ]
+      },
+      "activity": {
+        "label": "commute",
+        "p": 0.95,
+        "alternatives": [
+          {
+            "label": "travel",
+            "p": 0.05
+          }
+        ]
+      },
+      "participants": [
+        "p1"
+      ],
+      "speakers": [],
+      "svo_bullets": [
+        {
+          "text": "用户-乘坐-地铁",
+          "type": "activity",
+          "evidence_spans": [
+            [
+              0.0,
+              273.5
+            ]
+          ],
+          "confidence": 0.95
+        },
+        {
+          "text": "用户-处于-嘈杂的地铁车厢环境",
+          "type": "environment",
+          "evidence_spans": [
+            [
+              0.0,
+              273.5
+            ]
+          ],
+          "confidence": 0.98
+        },
+        {
+          "text": "地铁广播-播报-到站信息（如生命科学园站、中心庄站）",
+          "type": "interaction",
+          "evidence_spans": [
+            [
+              185.0,
+              192.0
+            ],
+            [
+              260.0,
+              268.0
+            ]
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "environment_index": {
+        "transport_mode": "stationary",
+        "weather": null,
+        "location_type": "indoor",
+        "time_of_day": "evening"
+      },
+      "context_tags": [
+        "indoor",
+        "moving",
+        "commute",
+        "solo",
+        "noisy_audio",
+        "subway",
+        "public_transport"
+      ],
+      "summary": "用户独自乘坐地铁，车厢内环境嘈杂，背景中持续有列车运行声和到站广播声。",
+      "key_quotes": [],
+      "todos": [],
+      "acoustic_details": {
+        "primary_sounds": [
+          {
+            "label": "train_noise",
+            "probability": 0.95
+          },
+          {
+            "label": "station_announcement",
+            "probability": 0.8
+          }
+        ],
+        "avg_noise_level": 0.7,
+        "speech_clarity": "none"
+      },
+      "uncertainties": [],
+      "confidence": 0.97,
+      "merge_hint": {
+        "can_merge_with_prev": false,
+        "can_merge_with_next": false,
+        "reason": "场景发生地点和活动类型变化，从乘坐交通工具变为步行。"
+      },
+      "warnings": [],
+      "transcript": []
+    },
+    {
+      "id": "s2",
+      "start_sec": 273.5,
+      "end_sec": 404.2,
+      "start_time": "2025-12-01T20:20:33.500+08:00",
+      "end_time": "2025-12-01T20:22:44.200+08:00",
+      "location": {
+        "place_id": "l2",
+        "candidates": [
+          {
+            "name": "地铁站及附近街道",
+            "p": 0.95
+          }
+        ]
+      },
+      "activity": {
+        "label": "commute",
+        "p": 0.9,
+        "alternatives": [
+          {
+            "label": "travel",
+            "p": 0.1
+          }
+        ]
+      },
+      "participants": [
+        "p1"
+      ],
+      "speakers": [],
+      "svo_bullets": [
+        {
+          "text": "用户-离开-地铁站并开始步行",
+          "type": "activity",
+          "evidence_spans": [
+            [
+              273.5,
+              404.2
+            ]
+          ],
+          "confidence": 0.95
+        },
+        {
+          "text": "用户-从-室内地铁站-走到-有风的室外环境",
+          "type": "environment",
+          "evidence_spans": [
+            [
+              340.0,
+              404.2
+            ]
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "environment_index": {
+        "transport_mode": "walking",
+        "weather": "windy",
+        "location_type": "outdoor",
+        "time_of_day": "evening"
+      },
+      "context_tags": [
+        "transition",
+        "outdoor",
+        "walking",
+        "commute",
+        "solo",
+        "wind_noise"
+      ],
+      "summary": "用户下地铁后，穿过地铁站并出站，开始在户外步行。此段无对话，主要为脚步声、衣物摩擦声和逐渐增强的风声。",
+      "key_quotes": [],
+      "todos": [],
+      "acoustic_details": {
+        "primary_sounds": [
+          {
+            "label": "footsteps",
+            "probability": 0.9
+          },
+          {
+            "label": "wind_noise",
+            "probability": 0.85
+          },
+          {
+            "label": "rustling",
+            "probability": 0.8
+          }
+        ],
+        "avg_noise_level": 0.6,
+        "speech_clarity": "none"
+      },
+      "uncertainties": [],
+      "confidence": 0.92,
+      "merge_hint": {
+        "can_merge_with_prev": false,
+        "can_merge_with_next": false,
+        "reason": "场景参与者发生变化，有新的人加入对话。"
+      },
+      "warnings": [],
+      "transcript": []
+    },
+    {
+      "id": "s3",
+      "start_sec": 404.2,
+      "end_sec": 1563.5,
+      "start_time": "2025-12-01T20:22:44.200+08:00",
+      "end_time": "2025-12-01T20:42:03.500+08:00",
+      "location": {
+        "place_id": "l3",
+        "candidates": [
+          {
+            "name": "户外街道",
+            "p": 0.95
+          }
+        ]
+      },
+      "activity": {
+        "label": "social",
+        "p": 0.8,
+        "alternatives": [
+          {
+            "label": "commute",
+            "p": 0.2
+          }
+        ]
+      },
+      "participants": [
+        "p1",
+        "p2"
+      ],
+      "speakers": [
+        "p1",
+        "p2"
+      ],
+      "svo_bullets": [
+        {
+          "text": "用户-与朋友-在户外边走边聊",
+          "type": "activity",
+          "evidence_spans": [
+            [
+              404.2,
+              1563.5
+            ]
+          ],
+          "confidence": 0.98
+        },
+        {
+          "text": "用户-处于-有持续风声的户外街道环境",
+          "type": "environment",
+          "evidence_spans": [
+            [
+              404.2,
+              1563.5
+            ]
+          ],
+          "confidence": 0.95
+        },
+        {
+          "text": "用户-向朋友-介绍自己新买的户外装备（小气炉）",
+          "type": "interaction",
+          "evidence_spans": [
+            [
+              408.0,
+              452.0
+            ]
+          ],
+          "confidence": 0.95
+        },
+        {
+          "text": "用户-与朋友-讨论-关于大学和专业的话题",
+          "type": "interaction",
+          "evidence_spans": [
+            [
+              1380.0,
+              1480.0
+            ]
+          ],
+          "confidence": 0.9
+        }
+      ],
+      "environment_index": {
+        "transport_mode": "walking",
+        "weather": "windy",
+        "location_type": "outdoor",
+        "time_of_day": "evening"
+      },
+      "context_tags": [
+        "outdoor",
+        "walking",
+        "social",
+        "conversation",
+        "two_people",
+        "wind_noise",
+        "casual"
+      ],
+      "summary": "用户与一位朋友在户外边走边聊。他们先是讨论了用户新买的用于做饭的“小气炉”等户外装备，随后聊到了关于“211”大学、华侨大学等学校和专业的话题。全程伴有持续的脚步声和风声。",
+      "key_quotes": [
+        {
+          "start_sec": 408.0,
+          "end_sec": 410.0,
+          "speaker": "p1",
+          "text": "我搞了一个小气炉。"
+        },
+        {
+          "start_sec": 415.0,
+          "end_sec": 417.0,
+          "speaker": "p1",
+          "text": "烧火的，不是烧电的。"
+        },
+        {
+          "start_sec": 450.0,
+          "end_sec": 452.0,
+          "speaker": "p1",
+          "text": "都是我的户外装备。"
+        }
+      ],
+      "todos": [],
+      "acoustic_details": {
+        "primary_sounds": [
+          {
+            "label": "human_speech",
+            "probability": 0.95
+          },
+          {
+            "label": "footsteps",
+            "probability": 0.9
+          },
+          {
+            "label": "wind_noise",
+            "probability": 0.9
+          }
+        ],
+        "avg_noise_level": 0.65,
+        "speech_clarity": "medium"
+      },
+      "uncertainties": [],
+      "confidence": 0.96,
+      "merge_hint": {
+        "can_merge_with_prev": false,
+        "can_merge_with_next": false,
+        "reason": "场景发生地点和活动类型变化，从户外步行进入室内休息。"
+      },
+      "warnings": [],
+      "transcript": [
+        {
+          "start_sec": 405.9,
+          "end_sec": 407.5,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "请将座位让给需要的人。"
+        },
+        {
+          "start_sec": 408.0,
+          "end_sec": 411.5,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "To ensure the safety of all passengers, please hold the handrail."
+        },
+        {
+          "start_sec": 550.1,
+          "end_sec": 554.8,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "下一站，中心庄，换乘地铁八号线的乘客，请准备下车。The next station, Zhongxinzhuang, change here for line 8."
+        },
+        {
+          "start_sec": 650.5,
+          "end_sec": 653.5,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "列车即将到达，生命科学园站。We are now arriving at Life Science Park."
+        },
+        {
+          "start_sec": 750.1,
+          "end_sec": 752.5,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "列车即将到达中心庄站。We are now arriving at Zhongxinzhuang."
+        },
+        {
+          "start_sec": 800.5,
+          "end_sec": 803.5,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "请您站稳扶好，不要倚靠车门。Please stand firm and hold the handrail."
+        },
+        {
+          "start_sec": 831.5,
+          "end_sec": 833.2,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "终于又在地铁里面自己做饭的麻烦。"
+        },
+        {
+          "start_sec": 833.5,
+          "end_sec": 834.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "我中午。"
+        },
+        {
+          "start_sec": 834.3,
+          "end_sec": 837.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "哎，我搞了一个，我搞了一个小灶，然后可以在里面烧的。"
+        },
+        {
+          "start_sec": 838.1,
+          "end_sec": 839.0,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "今天中午吃火锅吗？"
+        },
+        {
+          "start_sec": 839.3,
+          "end_sec": 841.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "不是，烧火的，不是烧电的。"
+        },
+        {
+          "start_sec": 841.5,
+          "end_sec": 841.8,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "这样的？"
+        },
+        {
+          "start_sec": 842.4,
+          "end_sec": 842.6,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "啊？"
+        },
+        {
+          "start_sec": 842.7,
+          "end_sec": 843.0,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "这么牛吗？"
+        },
+        {
+          "start_sec": 843.8,
+          "end_sec": 844.8,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "这还会报警吗？"
+        },
+        {
+          "start_sec": 845.0,
+          "end_sec": 846.8,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "不会啊。没有，没有烟，烟是直的。"
+        },
+        {
+          "start_sec": 847.8,
+          "end_sec": 848.5,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "这有水蒸气吧？"
+        },
+        {
+          "start_sec": 851.8,
+          "end_sec": 852.2,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "还可以。"
+        },
+        {
+          "start_sec": 853.0,
+          "end_sec": 854.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "煮煮火锅啊，什么的，是可以。"
+        },
+        {
+          "start_sec": 855.2,
+          "end_sec": 856.8,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "这是我的户外装备。"
+        },
+        {
+          "start_sec": 1114.5,
+          "end_sec": 1116.0,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "哦，这个不是开黑的，是开灰机的。"
+        },
+        {
+          "start_sec": 1116.2,
+          "end_sec": 1116.8,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "这个皮的是开飞机的。"
+        },
+        {
+          "start_sec": 1118.5,
+          "end_sec": 1120.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "而且我不知道他要创我。"
+        },
+        {
+          "start_sec": 1200.0,
+          "end_sec": 1201.5,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "哇，这个爽。"
+        },
+        {
+          "start_sec": 1202.0,
+          "end_sec": 1202.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "哇。"
+        },
+        {
+          "start_sec": 1203.0,
+          "end_sec": 1203.5,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "哇，这个爽。"
+        },
+        {
+          "start_sec": 1300.0,
+          "end_sec": 1302.0,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "我昨天看那个，他们说好像那个清华北大好像"
+        },
+        {
+          "start_sec": 1302.1,
+          "end_sec": 1304.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "哦，不都大学211是吧？"
+        },
+        {
+          "start_sec": 1304.2,
+          "end_sec": 1305.5,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "那好像没什么存在感。"
+        },
+        {
+          "start_sec": 1305.6,
+          "end_sec": 1306.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "存在感。"
+        },
+        {
+          "start_sec": 1306.1,
+          "end_sec": 1308.0,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "而且大楼都是那个，台湾，华侨。"
+        },
+        {
+          "start_sec": 1308.1,
+          "end_sec": 1310.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "华侨捐的，哦，就以前的。"
+        },
+        {
+          "start_sec": 1310.1,
+          "end_sec": 1310.5,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "华侨捐的。"
+        },
+        {
+          "start_sec": 1311.5,
+          "end_sec": 1314.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "暨南是可怜巴巴的，就一个211，还是政策性211。"
+        },
+        {
+          "start_sec": 1314.5,
+          "end_sec": 1315.5,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "广东也能多给一个。"
+        },
+        {
+          "start_sec": 1315.5,
+          "end_sec": 1316.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "也可以给一个。"
+        },
+        {
+          "start_sec": 1316.1,
+          "end_sec": 1317.5,
+          "speaker": "SPEAKER_02",
+          "maps_to": "p2",
+          "text": "他不给，他不给你拆走，但是有。"
+        },
+        {
+          "start_sec": 1318.0,
+          "end_sec": 1320.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "哎，狗血，那个以前好野鸡的，这两年还可以。"
+        },
+        {
+          "start_sec": 1410.0,
+          "end_sec": 1410.5,
+          "speaker": "SPEAKER_03",
+          "maps_to": null,
+          "text": "Wow."
+        },
+        {
+          "start_sec": 1411.5,
+          "end_sec": 1412.0,
+          "speaker": "SPEAKER_03",
+          "maps_to": null,
+          "text": "Wow."
+        },
+        {
+          "start_sec": 1412.5,
+          "end_sec": 1413.0,
+          "speaker": "SPEAKER_03",
+          "maps_to": null,
+          "text": "Wow."
+        },
+        {
+          "start_sec": 1413.5,
+          "end_sec": 1414.0,
+          "speaker": "SPEAKER_03",
+          "maps_to": null,
+          "text": "Wow."
+        },
+        {
+          "start_sec": 1414.5,
+          "end_sec": 1415.0,
+          "speaker": "SPEAKER_03",
+          "maps_to": null,
+          "text": "Wow."
+        },
+        {
+          "start_sec": 1415.5,
+          "end_sec": 1416.0,
+          "speaker": "SPEAKER_03",
+          "maps_to": null,
+          "text": "Wow."
+        },
+        {
+          "start_sec": 1423.5,
+          "end_sec": 1424.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "真神奇啦。"
+        },
+        {
+          "start_sec": 1426.0,
+          "end_sec": 1426.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "蛋蛋。"
+        },
+        {
+          "start_sec": 1428.0,
+          "end_sec": 1428.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "蛋蛋。"
+        },
+        {
+          "start_sec": 1429.5,
+          "end_sec": 1430.5,
+          "speaker": "SPEAKER_03",
+          "maps_to": null,
+          "text": "Wow."
+        },
+        {
+          "start_sec": 1460.0,
+          "end_sec": 1460.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "蛋。"
+        },
+        {
+          "start_sec": 1462.5,
+          "end_sec": 1463.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "蛋。"
+        },
+        {
+          "start_sec": 1464.0,
+          "end_sec": 1464.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "铁蛋。"
+        },
+        {
+          "start_sec": 1465.5,
+          "end_sec": 1466.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "铁蛋。"
+        },
+        {
+          "start_sec": 1467.5,
+          "end_sec": 1469.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "呀，真乖。"
+        },
+        {
+          "start_sec": 1480.0,
+          "end_sec": 1480.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "嘿。"
+        },
+        {
+          "start_sec": 1482.0,
+          "end_sec": 1482.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "嘿。"
+        },
+        {
+          "start_sec": 1510.0,
+          "end_sec": 1512.0,
+          "speaker": "SPEAKER_04",
+          "maps_to": null,
+          "text": "马上搞定你的菜。"
+        },
+        {
+          "start_sec": 1512.5,
+          "end_sec": 1514.5,
+          "speaker": "SPEAKER_04",
+          "maps_to": null,
+          "text": "还有比这样更高级的玩法，喜欢公园发生"
+        },
+        {
+          "start_sec": 1515.5,
+          "end_sec": 1517.5,
+          "speaker": "SPEAKER_05",
+          "maps_to": null,
+          "text": "我也会研究原子弹了。"
+        },
+        {
+          "start_sec": 1517.6,
+          "end_sec": 1518.5,
+          "speaker": "SPEAKER_06",
+          "maps_to": null,
+          "text": "我也会研究原子弹了。"
+        },
+        {
+          "start_sec": 1518.6,
+          "end_sec": 1522.0,
+          "speaker": "SPEAKER_05",
+          "maps_to": null,
+          "text": "有了原子弹，我们要停战就停战，我们要是不停战，怎么能让那边知道我们有原子弹了？"
+        },
+        {
+          "start_sec": 1522.1,
+          "end_sec": 1525.0,
+          "speaker": "SPEAKER_06",
+          "maps_to": null,
+          "text": "这算有了核弹到底拿来干嘛使的？咱们又不先用原子弹，那这事老僵着，我们越拖越痛快。"
+        },
+        {
+          "start_sec": 1525.1,
+          "end_sec": 1527.0,
+          "speaker": "SPEAKER_05",
+          "maps_to": null,
+          "text": "不对，今天下午十五军这个阵地加固，伤亡两千。"
+        },
+        {
+          "start_sec": 1527.1,
+          "end_sec": 1528.0,
+          "speaker": "SPEAKER_06",
+          "maps_to": null,
+          "text": "你们两倍，今天是不是非要"
+        },
+        {
+          "start_sec": 1528.5,
+          "end_sec": 1530.0,
+          "speaker": "SPEAKER_05",
+          "maps_to": null,
+          "text": "同志们，北边也成立了一个核定国家。"
+        },
+        {
+          "start_sec": 1530.5,
+          "end_sec": 1532.5,
+          "speaker": "SPEAKER_06",
+          "maps_to": null,
+          "text": "那咋办？他们觉得南韩是我们的最佳时机。"
+        },
+        {
+          "start_sec": 1533.5,
+          "end_sec": 1535.5,
+          "speaker": "SPEAKER_07",
+          "maps_to": null,
+          "text": "怎么没有炸弹？他们竟敢拿炸弹。"
+        },
+        {
+          "start_sec": 1535.6,
+          "end_sec": 1536.5,
+          "speaker": "SPEAKER_08",
+          "maps_to": null,
+          "text": "跑了，跑了。"
+        },
+        {
+          "start_sec": 1538.5,
+          "end_sec": 1540.5,
+          "speaker": "SPEAKER_09",
+          "maps_to": null,
+          "text": "全球都打起来了。"
+        },
+        {
+          "start_sec": 1541.0,
+          "end_sec": 1542.5,
+          "speaker": "SPEAKER_10",
+          "maps_to": null,
+          "text": "这也算新闻，赶紧先听听吧。"
+        },
+        {
+          "start_sec": 1545.0,
+          "end_sec": 1546.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "哇。"
+        },
+        {
+          "start_sec": 1546.5,
+          "end_sec": 1547.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "哇。"
+        },
+        {
+          "start_sec": 1548.0,
+          "end_sec": 1548.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "干嘛？"
+        },
+        {
+          "start_sec": 1549.5,
+          "end_sec": 1550.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "你要干嘛？"
+        },
+        {
+          "start_sec": 1551.0,
+          "end_sec": 1551.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "咿呀。"
+        },
+        {
+          "start_sec": 1552.5,
+          "end_sec": 1553.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "呀，哇。"
+        },
+        {
+          "start_sec": 1554.0,
+          "end_sec": 1556.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "咋长毛那么好，咋那么舒服。"
+        },
+        {
+          "start_sec": 1556.5,
+          "end_sec": 1558.0,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "呀，你是一只小乖乖。"
+        },
+        {
+          "start_sec": 1559.0,
+          "end_sec": 1559.5,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "真舒服。"
+        }
+      ],
+      "audio_stats": {
+        "traditional_vad_ratio": 0.4979944621276816
+      }
+    },
+    {
+      "id": "s4",
+      "start_sec": 1563.5,
+      "end_sec": 1776.132,
+      "start_time": "2025-12-01T20:42:03.500+08:00",
+      "end_time": "2025-12-01T20:45:36.132+08:00",
+      "location": {
+        "place_id": "l4",
+        "candidates": [
+          {
+            "name": "家",
+            "p": 0.85
+          },
+          {
+            "name": "室内未知地点",
+            "p": 0.15
+          }
+        ]
+      },
+      "activity": {
+        "label": "rest",
+        "p": 0.9,
+        "alternatives": [
+          {
+            "label": "social",
+            "p": 0.1
+          }
+        ]
+      },
+      "participants": [
+        "p1",
+        "e1"
+      ],
+      "speakers": [
+        "p1"
+      ],
+      "svo_bullets": [
+        {
+          "text": "用户-回到-室内并休息",
+          "type": "activity",
+          "evidence_spans": [
+            [
+              1563.5,
+              1776.132
+            ]
+          ],
+          "confidence": 0.95
+        },
+        {
+          "text": "用户-处于-安静的室内环境",
+          "type": "environment",
+          "evidence_spans": [
+            [
+              1563.5,
+              1776.132
+            ]
+          ],
+          "confidence": 0.98
+        },
+        {
+          "text": "用户-与宠物猫'蛋蛋'-进行互动",
+          "type": "interaction",
+          "evidence_spans": [
+            [
+              1578.0,
+              1776.132
+            ]
+          ],
+          "confidence": 0.98
+        },
+        {
+          "text": "宠物猫-发出-喵叫声和咕噜声",
+          "type": "interaction",
+          "evidence_spans": [
+            [
+              1575.0,
+              1578.0
+            ],
+            [
+              1660.0,
+              1720.0
+            ]
+          ],
+          "confidence": 0.99
+        }
+      ],
+      "environment_index": {
+        "transport_mode": "stationary",
+        "weather": null,
+        "location_type": "indoor",
+        "time_of_day": "evening"
+      },
+      "context_tags": [
+        "indoor",
+        "stationary",
+        "rest",
+        "home",
+        "pet",
+        "cat",
+        "quiet"
+      ],
+      "summary": "用户进入一个安静的室内环境（推测为家），并开始与他的宠物猫“蛋蛋”互动。可以清晰地听到用户呼唤猫的名字、逗猫的声音，以及猫的喵叫声和舒适的咕噜声。",
+      "key_quotes": [
+        {
+          "start_sec": 1580.0,
+          "end_sec": 1581.0,
+          "speaker": "p1",
+          "text": "蛋蛋"
+        },
+        {
+          "start_sec": 1609.5,
+          "end_sec": 1610.5,
+          "speaker": "p1",
+          "text": "真乖"
+        }
+      ],
+      "todos": [],
+      "acoustic_details": {
+        "primary_sounds": [
+          {
+            "label": "cat_meow",
+            "probability": 0.95
+          },
+          {
+            "label": "cat_purr",
+            "probability": 0.9
+          },
+          {
+            "label": "human_speech",
+            "probability": 0.85
+          }
+        ],
+        "avg_noise_level": 0.2,
+        "speech_clarity": "high"
+      },
+      "uncertainties": [
+        {
+          "field": "location.place_id",
+          "note": "根据进入安静室内并与宠物互动的行为，推断地点为'家'，但无直接证据。",
+          "candidates": [
+            "家"
+          ]
+        }
+      ],
+      "confidence": 0.95,
+      "merge_hint": {
+        "can_merge_with_prev": false,
+        "can_merge_with_next": false,
+        "reason": "音频结束。"
+      },
+      "warnings": [],
+      "transcript": [
+        {
+          "start_sec": 1566.2,
+          "end_sec": 1570.1,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "我们已经大获全胜，战争一旦结束，马上召开新政协。"
+        },
+        {
+          "start_sec": 1570.6,
+          "end_sec": 1574.8,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "还有原子弹，原子弹是维护国家主权，适合公园发现..."
+        },
+        {
+          "start_sec": 1576.0,
+          "end_sec": 1578.2,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "有了原子弹，我们要求..."
+        },
+        {
+          "start_sec": 1578.6,
+          "end_sec": 1582.0,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "你想啊，我们要是不用原子弹，怎么能让南边知道我们有原子弹了？"
+        },
+        {
+          "start_sec": 1582.1,
+          "end_sec": 1585.0,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "这上面有了核弹到底拿来干嘛使的？他们叫我们永远锁在..."
+        },
+        {
+          "start_sec": 1585.1,
+          "end_sec": 1586.4,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "老将越快我们越痛快。"
+        },
+        {
+          "start_sec": 1586.5,
+          "end_sec": 1588.8,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "不对！接上我十五军军长，他害我两年..."
+        },
+        {
+          "start_sec": 1587.9,
+          "end_sec": 1589.5,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "你们俩别吵了，这一点都不是..."
+        },
+        {
+          "start_sec": 1589.2,
+          "end_sec": 1591.2,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "姐妹们，如果有一个统一国家..."
+        },
+        {
+          "start_sec": 1591.6,
+          "end_sec": 1592.2,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "那打吧。"
+        },
+        {
+          "start_sec": 1592.6,
+          "end_sec": 1594.6,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "他们觉得南团是我们的最佳时机。"
+        },
+        {
+          "start_sec": 1596.2,
+          "end_sec": 1598.2,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "他没有炸弹！他是不是拿错炸弹了？"
+        },
+        {
+          "start_sec": 1598.3,
+          "end_sec": 1599.3,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "他跑了！跑了！"
+        },
+        {
+          "start_sec": 1602.2,
+          "end_sec": 1604.2,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "我们是不是要跟他们打起来了？"
+        },
+        {
+          "start_sec": 1605.2,
+          "end_sec": 1607.2,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "这也在新闻，赶紧先频道吧。"
+        },
+        {
+          "start_sec": 1628.2,
+          "end_sec": 1631.0,
+          "speaker": "SPEAKER_02",
+          "maps_to": null,
+          "text": "留言说最喜欢的MC其实是大家想要知道的吗？"
+        },
+        {
+          "start_sec": 1631.3,
+          "end_sec": 1632.2,
+          "speaker": "SPEAKER_02",
+          "maps_to": null,
+          "text": "是这样的。"
+        },
+        {
+          "start_sec": 1632.7,
+          "end_sec": 1637.8,
+          "speaker": "SPEAKER_02",
+          "maps_to": null,
+          "text": "番薯，旺仔，空气炸锅十分钟，就是旺仔大馒头。旺仔。"
+        },
+        {
+          "start_sec": 1638.2,
+          "end_sec": 1644.2,
+          "speaker": "SPEAKER_02",
+          "maps_to": null,
+          "text": "起司片，吉利丁片，微波炉高火五分钟，冰箱冷藏，就是旺仔奶酪棒。旺仔。"
+        },
+        {
+          "start_sec": 1644.6,
+          "end_sec": 1650.4,
+          "speaker": "SPEAKER_02",
+          "maps_to": null,
+          "text": "巧克力，棉花糖，微波炉高火五分钟，冰箱冷藏，撒可可粉，就是旺仔..."
+        },
+        {
+          "start_sec": 1650.6,
+          "end_sec": 1651.4,
+          "speaker": "SPEAKER_02",
+          "maps_to": null,
+          "text": "旺仔。"
+        },
+        {
+          "start_sec": 1658.0,
+          "end_sec": 1704.0,
+          "speaker": "SPEAKER_03",
+          "maps_to": null,
+          "text": "(Singing) 我慢慢地听 雪落下的声音..."
+        },
+        {
+          "start_sec": 1705.5,
+          "end_sec": 1708.5,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "质量都好，而且东西是国外..."
+        },
+        {
+          "start_sec": 1709.5,
+          "end_sec": 1710.5,
+          "speaker": "SPEAKER_01",
+          "maps_to": null,
+          "text": "这个这个。"
+        },
+        {
+          "start_sec": 1719.2,
+          "end_sec": 1719.8,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "干嘛？"
+        },
+        {
+          "start_sec": 1720.8,
+          "end_sec": 1721.8,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "你要干嘛？"
+        },
+        {
+          "start_sec": 1722.9,
+          "end_sec": 1723.6,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "你看。"
+        },
+        {
+          "start_sec": 1726.8,
+          "end_sec": 1728.8,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "Ya~ Wow~"
+        },
+        {
+          "start_sec": 1731.6,
+          "end_sec": 1733.2,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "咋，咋毛那么好？"
+        },
+        {
+          "start_sec": 1733.7,
+          "end_sec": 1734.9,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "咋那么舒服？"
+        },
+        {
+          "start_sec": 1736.8,
+          "end_sec": 1737.6,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "Ya~"
+        },
+        {
+          "start_sec": 1740.2,
+          "end_sec": 1742.2,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "你是一只小乖乖。"
+        },
+        {
+          "start_sec": 1744.2,
+          "end_sec": 1745.3,
+          "speaker": "myself",
+          "maps_to": "p1",
+          "text": "上个厕所。"
+        }
+      ],
+      "audio_stats": {
+        "traditional_vad_ratio": 0.18614168783516793
+      }
+    }
+  ],
+  "suggested_merges": [],
+  "improvement_advice": [],
+  "warnings": [
+    "场景 s3 持续时间较长（约19分钟），但因活动、地点和参与者保持一致，故未进行切分。"
+  ]
+}
